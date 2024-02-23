@@ -2,7 +2,7 @@ import json
 import csv
 
 # Opening JSON file
-f = open('MyFile.txt')
+f = open('data.json')
  
 # returns JSON object as 
 # a dictionary
@@ -20,7 +20,7 @@ for x in data['items']:
          x.get("pool","Not available"),
          x.get("rules","Not available"),
          x["sourceAddressTranslation"],
-         x["enabled"]
+         x["enabled"],
          ])
      except KeyError:
           pass
