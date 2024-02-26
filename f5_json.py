@@ -43,19 +43,20 @@ myssl.verify_mode=ssl.CERT_NONE
 
 for device in devices:
     try:
-        path = 'output/{}'.format(device)
+        path = 'audit/{}'.format(device)
         if not os.path.exists(path):
             os.makedirs(path)
         for url in urls:
             req =  request.Request(url['url'].format(device), method="GET", headers=headers)
             base64string = base64.b64encode(bytes('{}:{}'.format(username, password), 'ascii'))
             req.add_header('Authorization', 'Basic {}'.format(base64string.decode('utf-8')))
-            resp = request.urlopen(req,context=myssl)
-            res_body = resp.read()
-            data = json.loads(res_body.decode('utf-8'))
+            response = request.urlopen(req,context=myssl)
+            response_body = response.read()
+            data = json.loads(response_body.decode('utf-8'))
             json_formatted_str = json.dumps(data, indent=2)
             f= open( '{}/{}-{}{}.json'.format(path,device,url['filename'],start_date), "w") 
             f.write(json_formatted_str)
             f.close
     except error.HTTPError as e: 
-        print('HTTP Error 401: F5 Authorization Required or wrong username/password')
+        print(e.code)
+        print(e.read())
